@@ -7,6 +7,14 @@ import android.util.Log;
 
 import com.liwenq.loveubymoment.myLib.TimeDiff;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -68,7 +76,45 @@ public class MemorialDayListActivity extends Activity
                     .setActivateOnItemClick(true);
         }
 
+        GetThread gt = new GetThread("", "");
+        gt.start();
+
         // TODO: If exposing deep links into your app, handle intents here.
+    }
+
+    class GetThread extends Thread {
+
+        String name;
+        String pwd;
+
+        public GetThread(String name, String pwd) {
+            this.name = name;
+            this.pwd = pwd;
+        }
+
+        @Override
+        public void run() {
+            HttpClient httpClient = new DefaultHttpClient();
+            String url = "https://hellonodemongo-davidlovezoe.rhcloud.com/momentnote";
+            HttpGet httpGet = new HttpGet(url);
+            try {
+                HttpResponse response = httpClient.execute(httpGet);
+                if (response.getStatusLine().getStatusCode() == 200) {
+                    HttpEntity entity = response.getEntity();
+                    BufferedReader reader = new BufferedReader(
+                            new InputStreamReader(entity.getContent()));
+                    String result =null;
+                    while(reader.readLine()!=null){
+                       result += reader.readLine();
+                    }
+
+                    Log.d("HTTP", "GET:" + result);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
     }
 
     /**
