@@ -2,6 +2,9 @@ package com.liwenq.loveubymoment.dummy;
 
 import android.util.Log;
 
+import com.liwenq.loveubymoment.Entity.MomentNote;
+import com.liwenq.loveubymoment.WebUtil.HttpUtil;
+import com.liwenq.loveubymoment.WebUtil.JsonUtil;
 import com.liwenq.loveubymoment.myLib.TimeDiff;
 
 import java.text.ParseException;
@@ -49,8 +52,17 @@ public class DummyContent {
 
         // Add 3 sample items.
         addItem(new DummyItem("相遇纪念", meTimeDuration));
-        addItem(new DummyItem("宝宝出现了", hanbaoDuration));
+        addItem(new DummyItem("汉堡出现了", hanbaoDuration));
         // addItem(new DummyItem("3", "Item 3"));
+
+        // fetch notes from openshift
+        String rawJson = HttpUtil.Get("https://hellonodemongo-davidlovezoe.rhcloud.com/MomentNote");
+        Log.d(DummyContent.class.getName(),"raw json from openshift: " + rawJson);
+        List<MomentNote> momentNoteList = JsonUtil.Serialize2Note(rawJson);
+
+        for(MomentNote note:momentNoteList){
+            addItem(new DummyItem(note.GetTitle(), note.toString()));
+        }
     }
 
     private static void addItem(DummyItem item) {

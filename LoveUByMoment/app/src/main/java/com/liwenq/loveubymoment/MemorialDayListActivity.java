@@ -50,6 +50,7 @@ public class MemorialDayListActivity extends Activity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_memorialday_list);
+        /*
         String currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
         Log.d("loveu", "current datetime: " + currentDateTimeString);
         Date metTime =null;
@@ -62,6 +63,7 @@ public class MemorialDayListActivity extends Activity
 
         long[] diff = TimeDiff.getTimeDifference(metTime, now);
         Log.d(TAG, "Time difference is " +diff[0]+" day(s),"+ diff[1] +" hour(s)," + diff[2] + " minute(s),"+diff[3] +" second(s) and "+ diff[4]+" millisecond(s)");
+       */
         if (findViewById(R.id.memorialday_detail_container) != null) {
             // The detail container view will be present only in the
             // large-screen layouts (res/values-large and
@@ -76,8 +78,8 @@ public class MemorialDayListActivity extends Activity
                     .setActivateOnItemClick(true);
         }
 
-        GetThread gt = new GetThread("", "");
-        gt.start();
+        //GetThread gt = new GetThread("", "");
+        //gt.start();
 
         // TODO: If exposing deep links into your app, handle intents here.
     }
@@ -103,12 +105,14 @@ public class MemorialDayListActivity extends Activity
                     HttpEntity entity = response.getEntity();
                     BufferedReader reader = new BufferedReader(
                             new InputStreamReader(entity.getContent()));
-                    String result =null;
-                    while(reader.readLine()!=null){
-                       result += reader.readLine();
+                    StringBuffer result = new StringBuffer();
+					String line ="";
+                    while((line = reader.readLine()) != null){
+                       result.append(line);
                     }
 
-                    Log.d("HTTP", "GET:" + result);
+                    Log.d("HTTP", "GET:" + result.toString());
+					//JsonObject o = new JsonObject(result.toString());
                 }
             } catch (Exception e) {
                 e.printStackTrace();
