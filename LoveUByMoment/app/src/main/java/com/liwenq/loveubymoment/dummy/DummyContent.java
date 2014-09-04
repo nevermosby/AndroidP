@@ -34,6 +34,7 @@ public class DummyContent {
     public static Map<String, DummyItem> ITEM_MAP = new HashMap<String, DummyItem>();
 
     static {
+        /*
         Date metTime =null;
         Date now = new Date();
         Date hanbaoBirth =null;
@@ -55,14 +56,10 @@ public class DummyContent {
         addItem(new DummyItem("汉堡出现了", hanbaoDuration));
         // addItem(new DummyItem("3", "Item 3"));
 
-        // fetch notes from openshift
-        String rawJson = HttpUtil.Get("https://hellonodemongo-davidlovezoe.rhcloud.com/MomentNote");
-        Log.d(DummyContent.class.getName(),"raw json from openshift: " + rawJson);
-        List<MomentNote> momentNoteList = JsonUtil.Serialize2Note(rawJson);
-
-        for(MomentNote note:momentNoteList){
-            addItem(new DummyItem(note.GetTitle(), note.toString()));
-        }
+        // use thread to get notes from openshift
+        HttpThread httpThread = new HttpThread();
+        httpThread.start();
+        */
     }
 
     private static void addItem(DummyItem item) {
@@ -85,6 +82,20 @@ public class DummyContent {
         @Override
         public String toString() {
             return content;
+        }
+    }
+
+    static class HttpThread extends Thread {
+        @Override
+        public void run() {
+            // fetch notes from openshift
+            String rawJson = HttpUtil.Get("https://hellonodemongo-davidlovezoe.rhcloud.com/MomentNote");
+            Log.d(DummyContent.class.getName(),"raw json from openshift: " + rawJson);
+            List<MomentNote> momentNoteList = JsonUtil.Serialize2Note(rawJson);
+
+            for(MomentNote note:momentNoteList){
+                addItem(new DummyItem(note.GetTitle(), note.toString()));
+            }
         }
     }
 }

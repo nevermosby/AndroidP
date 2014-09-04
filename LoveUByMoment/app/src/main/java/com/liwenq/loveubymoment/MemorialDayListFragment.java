@@ -9,6 +9,11 @@ import android.widget.ListView;
 
 
 import com.liwenq.loveubymoment.dummy.DummyContent;
+import com.liwenq.loveubymoment.myLib.TimeDiff;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * A list fragment representing a list of MemorialDays. This fragment
@@ -148,5 +153,10 @@ public class MemorialDayListFragment extends ListFragment {
         }
 
         mActivatedPosition = position;
+    }
+
+    private static void addItem(DummyContent.DummyItem item) {
+        DummyContent.ITEMS.add(item);
+        DummyContent.ITEM_MAP.put(item.id, item);
     }
 }

@@ -3,5 +3,9 @@
 
     <string name="app_name">LoveUByMoment</string>
     <string name="title_memorialday_detail">MemorialDay Detail</string>
+    <string name="title_activity_memorial_day_main_activtity">MemorialDayMainActivtity</string>
+    <string name="MomentNote_Header">Note Timeline</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_listview">Notes</string>
 
 </resources>
