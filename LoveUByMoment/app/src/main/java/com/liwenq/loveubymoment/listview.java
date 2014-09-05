@@ -51,15 +51,18 @@ public class listview extends Activity {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+
             Toast.makeText(getApplicationContext(),
                     "Done", Toast.LENGTH_LONG).show();
 
             Log.d(listview.class.getName(), "current thread from onPostExecute: " + Thread.currentThread().getName());
-            // PopulateListView();
+            PopulateListView();
         }
 
         @Override
         protected Void doInBackground(Void... params) {
+		    Log.d(listview.class.getName(), "current thread from doInBackground: " + Thread.currentThread().getName());
+            /*
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -78,6 +81,20 @@ public class listview extends Activity {
                     });
                 }
             }).start();
+            */
+            String rawJson = HttpUtil.Get("https://hellonodemongo-davidlovezoe.rhcloud.com/MomentNote");
+            Log.d(listview.class.getName(), "raw json from openshift: " + rawJson);
+            List<MomentNote> noteListFromOpenShift = JsonUtil.Serialize2Note(rawJson);
+            momentNoteList.addAll(noteListFromOpenShift);
+            AddMemorialDays();
+
+//            mHandler.post(new Runnable() {
+//                @Override
+//                public void run () {
+//                    Log.d(listview.class.getName(), "current thread from handler post: " + Thread.currentThread().getName());
+//                    PopulateListView();
+//                }
+//            });
             return null;
         }
     }
