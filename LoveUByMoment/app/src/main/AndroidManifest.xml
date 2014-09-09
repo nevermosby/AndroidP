@@ -27,6 +27,10 @@
         <activity
             android:name=".listview"
             android:label="@string/title_activity_listview" >
+        </activity>
+        <activity
+            android:name=".ViewPagerActivity"
+            android:label="@string/title_activity_view_pager" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

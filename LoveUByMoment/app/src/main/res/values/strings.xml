@@ -7,5 +7,7 @@
     <string name="MomentNote_Header">Note Timeline</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_listview">Notes</string>
+    <string name="title_activity_view_pager">MomentNote</string>
+    <string name="hello_world">Hello world!</string>
 
 </resources>
