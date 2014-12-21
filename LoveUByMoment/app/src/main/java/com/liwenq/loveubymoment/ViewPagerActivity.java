@@ -2,11 +2,16 @@ package com.liwenq.loveubymoment;
 
 import android.app.ActionBar;;
 import android.app.FragmentTransaction;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 
@@ -20,6 +25,10 @@ public class ViewPagerActivity extends FragmentActivity implements ActionBar.Tab
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_pager);
+
+        // release the notification
+        createNotification();
+
         mViewPager=(ViewPager) findViewById(R.id.pager);
         
         final ActionBar actionBar=getActionBar();
@@ -51,6 +60,31 @@ public class ViewPagerActivity extends FragmentActivity implements ActionBar.Tab
                     Log.d(ViewPagerActivity.class.getName(),"onPageScrollStateChanged scroll state settling "+state);
             }
         });
+    }
+
+    private void createNotification() {
+    /*
+    set up a notification
+    * */
+        // prepare intent which is triggered if the notification is selected
+        Intent intent = new Intent(this, DayDetailActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        // build notification
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.ic_launcher)
+                        .setContentTitle("My notification")
+                        .setContentText("Hello World!")
+                        .setAutoCancel(true)
+                        .setContentIntent(pendingIntent);
+
+        // Sets an ID for the notification
+        int mNotificationId = 1;
+        // Gets an instance of the NotificationManager service
+        NotificationManager mNotifyMgr =
+                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        // Builds the notification and issues it.
+        mNotifyMgr.notify(mNotificationId, mBuilder.build());
     }
 
     private void addTabs(ActionBar actionBar) {

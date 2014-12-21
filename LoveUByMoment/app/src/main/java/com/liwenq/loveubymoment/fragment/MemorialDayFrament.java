@@ -2,15 +2,12 @@ package com.liwenq.loveubymoment.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import com.liwenq.loveubymoment.Entity.MomentNote;
 import com.liwenq.loveubymoment.MyAdapter.NoteListAdapter;
@@ -25,16 +22,10 @@ import java.util.List;
  */
 public class MemorialDayFrament extends ListFragment {
     private List<MomentNote> momentNoteList = new ArrayList<MomentNote>();
-
+    Context context;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.activity_listview_fragment, null,false);
-
-//        // populate data
-//        momentNoteList.addAll(MemorialDaysUtil.AddMemorialDays());
-//
-//        // initialize list view
-//        PopulateListView();
         return rootView;
     }
 
@@ -42,10 +33,17 @@ public class MemorialDayFrament extends ListFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         // populate data
-        momentNoteList.addAll(MemorialDaysUtil.AddMemorialDays());
+        momentNoteList.addAll(MemorialDaysUtil.GetMemorialDays());
 
         // initialize list view
         PopulateListView();
+    }
+
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+        Toast.makeText(context,
+                "Clicked", Toast.LENGTH_LONG).show();
     }
 
     private void PopulateListView() {

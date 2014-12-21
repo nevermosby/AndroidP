@@ -54,14 +54,14 @@ public class MomentNoteFragment extends ListFragment {
             Toast.makeText(context,
                     "Done", Toast.LENGTH_LONG).show();
 
-            //Log.d(listview.class.getName(), "current thread from onPostExecute: " + Thread.currentThread().getName());
+            //Log.d(ViewPagerContentActivity.class.getName(), "current thread from onPostExecute: " + Thread.currentThread().getName());
             PopulateListView();
         }
 
         @Override
         protected Void doInBackground(Void... params) {
             String rawJson = HttpUtil.Get("https://hellonodemongo-davidlovezoe.rhcloud.com/MomentNote");
-            //Log.d(listview.class.getName(), "raw json from openshift: " + rawJson);
+            //Log.d(ViewPagerContentActivity.class.getName(), "raw json from openshift: " + rawJson);
             List<MomentNote> noteListFromOpenShift = JsonUtil.Serialize2Note(rawJson);
             momentNoteList.addAll(noteListFromOpenShift);
             return null;
