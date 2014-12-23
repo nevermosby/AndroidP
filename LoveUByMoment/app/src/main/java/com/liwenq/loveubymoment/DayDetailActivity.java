@@ -1,17 +1,54 @@
 package com.liwenq.loveubymoment;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+
+import com.google.gson.Gson;
+import com.liwenq.loveubymoment.Entity.MomentNote;
 
 
 public class DayDetailActivity extends Activity {
+
+    TextView title;
+    TextView body;
+
+    MomentNote day = new MomentNote();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_day_detail);
+
+        Intent detailIntent = getIntent();
+        if(detailIntent != null){
+            title = (TextView)findViewById(R.id.textViewTitle);
+            body = (TextView)findViewById(R.id.textViewBody);
+
+            String detail = detailIntent.getStringExtra("MOMENTDAY");
+            if(detail!=null){
+                try{
+                    day = new Gson().fromJson(detail, MomentNote.class);
+
+                }catch (Exception ex){
+                    title.setText("No detail found");
+                    body.setText("");
+                }
+
+                title.setText(day.GetTitle());
+                body.setText(day.GetBody());
+            }
+            else{
+                title.setText("No detail found");
+                body.setText("");
+            }
+
+        }else{
+
+        }
     }
 
 

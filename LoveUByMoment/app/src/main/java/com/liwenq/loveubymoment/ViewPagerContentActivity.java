@@ -122,13 +122,13 @@ public class ViewPagerContentActivity extends Activity {
             e.printStackTrace();
         }
 
-        String metDayTitle = DateUtil.DayGapByNow(metTime);
+        String metDayTitle = DateUtil.GetDayGapStringByNow(metTime);
         String metDayBody = "The best lucky day in my life";
 
-        String became3DayTitle = DateUtil.DayGapByNow(became3Time);
+        String became3DayTitle = DateUtil.GetDayGapStringByNow(became3Time);
         String became3DayBody = "The day we became 3";
 
-        String hanbaoBirthTitle = DateUtil.DayGapByNow(hanbaoBirth);
+        String hanbaoBirthTitle = DateUtil.GetDayGapStringByNow(hanbaoBirth);
         String hanbaoBirthBody = "The day hanbao was born";
 
         momentNoteList.add(new MomentNote(metDayTitle,metDayBody,"david"));

@@ -10,5 +10,7 @@
     <string name="title_activity_view_pager">MomentNote</string>
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_day_detail">Memorial Day Detail</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_tab_view">TabViewActivity</string>
 
 </resources>

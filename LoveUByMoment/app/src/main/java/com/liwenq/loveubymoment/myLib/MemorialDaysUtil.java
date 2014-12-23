@@ -18,7 +18,35 @@ public class MemorialDaysUtil {
     private static String BECAME3_DAY = "2014/01/16 00:00:00";
     private static String HANBAO_BIRTHDAY = "2014/10/26 11:30:00";
 
-    public  static List<MomentNote> GetMemorialDays() {
+
+    public static List<MomentNote> GetMemorialDayComing(){
+        List<String> memorialDays = new ArrayList<String>();
+        List<MomentNote> memorialDaysComing = new ArrayList<MomentNote>();
+        memorialDays.add(MET_DAY+";The best lucky day in my life");
+        memorialDays.add(BECAME3_DAY+";The day we became 3");
+        memorialDays.add(HANBAO_BIRTHDAY+";The day hanbao was born");
+
+        for(String input : memorialDays){
+            String[] inputDateAndDesc = input.split(";");
+
+            try{
+                Date target = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").parse(inputDateAndDesc[0]);
+                int gapDays = DateUtil.GetDaysByNow(target);
+                if(gapDays % 5 >=3){
+                    String dayGapString = DateUtil.GetDayGapStringByNow(target);
+                    memorialDaysComing.add(new MomentNote(dayGapString, inputDateAndDesc[1], "david"));
+                }
+            }catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+
+        }
+
+        return memorialDaysComing;
+    }
+
+    public static List<MomentNote> GetMemorialDays() {
         Date metTime =null;
         Date became3Time = null;
         Date hanbaoBirth = null;
@@ -32,13 +60,13 @@ public class MemorialDaysUtil {
             e.printStackTrace();
         }
 
-        String metDayTitle = DateUtil.DayGapByNow(metTime);
+        String metDayTitle = DateUtil.GetDayGapStringByNow(metTime);
         String metDayBody = "The best lucky day in my life";
 
-        String became3DayTitle = DateUtil.DayGapByNow(became3Time);
+        String became3DayTitle = DateUtil.GetDayGapStringByNow(became3Time);
         String became3DayBody = "The day we became 3";
 
-        String hanbaoBirthTitle = DateUtil.DayGapByNow(hanbaoBirth);
+        String hanbaoBirthTitle = DateUtil.GetDayGapStringByNow(hanbaoBirth);
         String hanbaoBirthBody = "The day hanbao was born";
 
         momentNoteList.add(new MomentNote(metDayTitle,metDayBody,"david"));
