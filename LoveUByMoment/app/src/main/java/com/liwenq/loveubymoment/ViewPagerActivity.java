@@ -4,6 +4,7 @@ import android.app.ActionBar;;
 import android.app.FragmentTransaction;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -16,6 +17,8 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.liwenq.loveubymoment.Entity.MomentNote;
+import com.liwenq.loveubymoment.Service.AlarmManagerBroadcastReceiver;
+import com.liwenq.loveubymoment.Service.MemorialDayCheckService;
 import com.liwenq.loveubymoment.fragment.MemorialDayFragment;
 import com.liwenq.loveubymoment.fragment.MomentNoteFragment;
 import com.liwenq.loveubymoment.myLib.MemorialDaysUtil;
@@ -24,11 +27,14 @@ import java.util.List;
 
 public class ViewPagerActivity extends FragmentActivity implements ActionBar.TabListener {
 
+    private AlarmManagerBroadcastReceiver alarm;
     ViewPager mViewPager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_pager);
+
+        alarm = new AlarmManagerBroadcastReceiver();
 
         // check the memorial days
         checkMemorialDays();
@@ -48,7 +54,7 @@ public class ViewPagerActivity extends FragmentActivity implements ActionBar.Tab
 
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                Log.d(ViewPagerActivity.class.getName(),"onPageScrolled "+position+" "+positionOffset+" "+positionOffsetPixels);
+                // Log.d(ViewPagerActivity.class.getName(),"onPageScrolled "+position+" "+positionOffset+" "+positionOffsetPixels);
             }
 
             @Override
@@ -60,52 +66,36 @@ public class ViewPagerActivity extends FragmentActivity implements ActionBar.Tab
             @Override
             public void onPageScrollStateChanged(int state) {
                 if(state==ViewPager.SCROLL_STATE_IDLE)
-                    Log.d(ViewPagerActivity.class.getName(), "onPageScrollStateChanged scroll state idle " + state);
-                if(state==ViewPager.SCROLL_STATE_DRAGGING)
-                    Log.d(ViewPagerActivity.class.getName(),"onPageScrollStateChanged scroll state dragging "+state);
+                {
+                    //Log.d(ViewPagerActivity.class.getName(), "onPageScrollStateChanged scroll state idle " + state);
+                }
+                if(state==ViewPager.SCROLL_STATE_DRAGGING){
+                    // Log.d(ViewPagerActivity.class.getName(),"onPageScrollStateChanged scroll state dragging "+state);
+                }
                 if(state==ViewPager.SCROLL_STATE_SETTLING)
-                    Log.d(ViewPagerActivity.class.getName(),"onPageScrollStateChanged scroll state settling "+state);
+                {
+                    // Log.d(ViewPagerActivity.class.getName(),"onPageScrollStateChanged scroll state settling "+state);
+                }
             }
         });
     }
 
     private void checkMemorialDays() {
 
-        List<MomentNote> comingMemorialDays = MemorialDaysUtil.GetMemorialDayComing();
-        int nid =1;
-        if(comingMemorialDays!=null && comingMemorialDays.size()>0){
-            for(MomentNote note : comingMemorialDays){
-                createNotification(note, nid++);
-            }
-        }
+        // Intent intent = new Intent(this, MemorialDayCheckService.class);
+        // startService(intent);
 
-    }
+        Context context = this.getApplicationContext();
+        alarm.SetAlarm(context);
 
-    private void createNotification(MomentNote note, int nId) {
-    /*
-    set up a notification
-    * */
-        // prepare intent which is triggered if the notification is selected
-        Intent intent = new Intent(this, DayDetailActivity.class);
-        Gson gson = new Gson();
-        intent.putExtra("MOMENTDAY", gson.toJson(note));
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+//        List<MomentNote> comingMemorialDays = MemorialDaysUtil.GetMemorialDayComing();
+//        int nid =1;
+//        if(comingMemorialDays!=null && comingMemorialDays.size()>0){
+//            for(MomentNote note : comingMemorialDays){
+//                createNotification(note, nid++);
+//            }
+//        }
 
-        // build notification
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.ic_launcher)
-                        .setContentTitle("Memorial Day is coming")
-                        .setContentText(note.GetTitle())
-                        .setAutoCancel(true)
-                        .setContentIntent(pendingIntent);
-
-        // Sets an ID for the notification
-        // int mNotificationId = nId;
-        // Gets an instance of the NotificationManager service
-        NotificationManager mNotifyMgr =
-                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        // Builds the notification and issues it.
-        mNotifyMgr.notify(nId, mBuilder.build());
     }
 
     private void addTabs(ActionBar actionBar) {

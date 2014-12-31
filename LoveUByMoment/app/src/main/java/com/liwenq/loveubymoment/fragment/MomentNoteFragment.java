@@ -16,6 +16,7 @@ import com.liwenq.loveubymoment.MyAdapter.NoteListAdapter;
 import com.liwenq.loveubymoment.R;
 import com.liwenq.loveubymoment.WebUtil.HttpUtil;
 import com.liwenq.loveubymoment.WebUtil.JsonUtil;
+import com.liwenq.loveubymoment.myLib.UtilHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +37,11 @@ public class MomentNoteFragment extends ListFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         this.context = getActivity().getApplicationContext();
-        new FetchMomentNotesAndBuildListView().execute();
+        if(UtilHelper.IsInternetAvailable(this.context)){
+            new FetchMomentNotesAndBuildListView().execute();
+        }else{
+            Toast.makeText(this.context, "No internet access. Please check", Toast.LENGTH_LONG).show();
+        }
     }
 
     private class FetchMomentNotesAndBuildListView extends AsyncTask<Void, Void, Void> {
@@ -60,10 +65,24 @@ public class MomentNoteFragment extends ListFragment {
 
         @Override
         protected Void doInBackground(Void... params) {
-            String rawJson = HttpUtil.Get("https://hellonodemongo-davidlovezoe.rhcloud.com/MomentNote");
-            //Log.d(ViewPagerContentActivity.class.getName(), "raw json from openshift: " + rawJson);
-            List<MomentNote> noteListFromOpenShift = JsonUtil.Serialize2Note(rawJson);
-            momentNoteList.addAll(noteListFromOpenShift);
+            try{
+                String rawJson = HttpUtil.Get("https://hellonodemongo-davidlovezoe.rhcloud.com/MomentNote");
+                if(rawJson!=null) {
+                    //Log.d(ViewPagerContentActivity.class.getName(), "raw json from openshift: " + rawJson);
+                    List<MomentNote> noteListFromOpenShift = JsonUtil.Serialize2Note(rawJson);
+                    momentNoteList.addAll(noteListFromOpenShift);
+                }
+                else {
+                    // Log.d(this.getClass().getName(), "raw json from openshift: " + rawJson);
+                    Toast.makeText(context, "Cannot get Moment Note from internet and please check your internet access.", Toast.LENGTH_LONG).show();
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.d(this.getClass().getName(), "Got exception to get MomentNote: " + ex.getMessage());
+                Toast.makeText(context, "Cannot get Moment Note from internet and please check your internet access.", Toast.LENGTH_LONG).show();
+            }
+
             return null;
         }
     }
